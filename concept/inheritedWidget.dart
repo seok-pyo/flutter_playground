@@ -32,3 +32,48 @@ class FrogColor extends InheritedWidget{
   @override
   bool updateShouldNotify(FrogColor oldWidget) => color != oldWidget.color;
 }
+
+// - - - - - - - - - - - - - - - - - - - - 
+
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context){
+    return DataProvider(
+      data:'Hello, pano!',
+      child: MaterialApp(
+        context,
+        home: HomeScreen(),
+      )
+    )
+  }
+}
+
+class DataProvider extends InheritedWidget {
+  final String data;
+
+  const DataProvider({required this.data, required Widget child}) :
+  super(child:child);
+
+  static DataProvider? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<DataProvider>();
+  }
+
+  @override
+  bool updateShouldNotify(DataProvider oldWidget) => data != oldWidget.data;  
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final data = DataProvider.of(context)?.data ?? 'No data';
+
+    return Scaffold(
+      appBar: AppBar(title: Text('InheritedWidget Example')),
+      body: Center(
+        child: Text(data, style: TextStyle(fontSize: 24)),
+      ),
+    );
+  }
+}
